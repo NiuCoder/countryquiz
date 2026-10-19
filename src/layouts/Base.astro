@@ -1,0 +1,34 @@
+---
+import '@fontsource/nunito/700.css';
+import '@fontsource/nunito/800.css';
+import '@fontsource/nunito/900.css';
+import '../styles/game.css';
+import '../styles/site.css';
+import { SITE, LANGS, HTML_LANG } from '../lib/site.js';
+
+const { lang, path = '', title, description, jsonld = [] } = Astro.props;
+const abs = (l) => `${SITE}/${l}/${path}`;
+---
+<!doctype html>
+<html lang={HTML_LANG[lang]}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={abs(lang)}>
+{LANGS.map((l) => <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(l)} />)}
+<link rel="alternate" hreflang="x-default" href={abs('en')}>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content={lang === 'zh' ? '看轮廓猜国家' : 'Guess the Country'}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={abs(lang)}>
+<meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')}>
+<meta name="twitter:card" content="summary">
+{jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+</head>
+<body>
+<slot />
+</body>
+</html>

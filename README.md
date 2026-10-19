@@ -1,47 +1,49 @@
-# 看轮廓猜国家
+# 看轮廓猜国家 / Guess the Country
 
-当前版本：0.2
+当前版本：0.3
 
-一个多邻国风格的地理小游戏，支持中文和英文界面。
+多邻国风格的地理小游戏，中英文双语。基于 Astro 构建为静态站点：游戏逻辑是一个 JS 模块，外面套静态 HTML 入口页，方便搜索引擎收录。
 
 ## 玩法
 
-- 看轮廓猜国家：根据地图形状选出国名
-- 看国名找轮廓：根据国名从四个形状里挑出正确的
-- 看国旗猜国家：认出国旗属于哪个国家
-- 看国名找国旗：根据国名从四面国旗里挑出正确的
-- 混合挑战：四种题型随机出现
+- 看轮廓猜国家 / 看国名找轮廓 / 看国旗猜国家 / 看国名找国旗 / 混合挑战
+- 学习模式：可拖动、缩放的世界地图，点国家看国旗、首都、当地文字国名，支持朗读
+- 题库 165 个国家，三档难度，可按大洲筛选；进度保存在浏览器 localStorage
 
-## 学习模式
+## 页面结构
 
-首页点「学习模式」进入可拖动、缩放的世界地图。点任意国家（或用搜索框按中文、英文查找），就能看到它的国旗、地图轮廓、中英文名、所在大洲、首都和当地文字的国名，还可以朗读中英文名（使用浏览器自带的语音功能）。面积很小的国家用橙色圆点标出，方便点选。
+| URL | 内容 |
+|---|---|
+| `/en/`、`/zh/` | 首页（可直接开玩） |
+| `/{lang}/{mode}/{region}/` | 玩法 × 地区落地页，例如 `/en/flag-quiz/europe/`，打开即预设该玩法与地区 |
+| `/{lang}/explore/` | 学习模式 |
+| `/{lang}/country/{slug}/` | 国家详情页（国旗、轮廓、首都、邻国） |
+| `/` | 重定向到 `/en/` |
 
-## 答题
+玩法 slug：`shape-quiz`、`find-the-shape-quiz`、`flag-quiz`、`find-the-flag-quiz`、`mixed-quiz`；地区 slug：`world`、`asia`、`europe`、`africa`、`north-america`、`south-america`、`oceania`。
 
-每道题答完后会显示国家在地图上的位置、国旗、中英文名称和当地文字的国名（如 Ελλάδα、日本、Россия）。
+## 目录
 
-题库共 165 个国家，分入门、进阶、挑战三档难度，可按大洲筛选。右上角按钮可切换中文 / English，首次打开时按浏览器语言自动选择。
+- `src/game/game.js`：游戏逻辑，`initGame(cfg)` 启动；`src/game/i18n.js`：界面文字
+- `src/data/`：地图（Natural Earth / world-atlas）、国家元数据、首都；`public/flags/`：国旗 SVG（flag-icons，MIT）
+- `src/lib/site.js`：站点常量、slug、国家列表；`src/lib/copy.js`：各页面 SEO 文案
+- `src/pages/`：路由；`src/layouts/Base.astro`：canonical / hreflang / OG / JSON-LD
 
-在线体验：https://countryshape-43r.pages.dev
+新增语言：在 `LANGS`、`I18N`、`copy.js` 里补一套文案即可，路由自动生成。
 
-## 本地运行
-
-直接用浏览器打开 `看轮廓猜国家.html`，或在项目目录运行：
+## 本地开发
 
 ```sh
-python3 -m http.server 8080
+npm install
+npm run dev      # http://localhost:4321/
+npm run build    # 输出到 dist/
 ```
 
-然后访问 `http://localhost:8080/看轮廓猜国家.html`。
-
-页面通过 CDN 加载 D3、TopoJSON 和 Google Fonts，需要联网。地图数据（Natural Earth / world-atlas）和国旗（flag-icons，MIT 许可）已内嵌在 HTML 中。学习进度保存在当前浏览器的 localStorage 中。
+换正式域名时，同步修改 `astro.config.mjs` 的 `site`、`src/lib/site.js` 的 `SITE` 和 `public/robots.txt`。
 
 ## Cloudflare Pages 部署
 
 - 生产分支：`main`
-- 框架预设：无
-- 构建命令：`mkdir -p dist && cp '看轮廓猜国家.html' dist/index.html`
+- 框架预设：Astro
+- 构建命令：`npm run build`
 - 构建输出目录：`dist`
-
-构建只把原始 HTML 复制为网站首页，不修改游戏代码。
-推送到 `main` 分支后，Cloudflare Pages 会自动构建并部署。

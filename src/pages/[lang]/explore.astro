@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import Game from '../../components/Game.astro';
+import { LANGS } from '../../lib/site.js';
+import { EXPLORE } from '../../lib/copy.js';
+
+export const getStaticPaths = () => LANGS.map((lang) => ({ params: { lang } }));
+const { lang } = Astro.params;
+const c = EXPLORE[lang];
+---
+<Base lang={lang} path="explore/" title={c.title} description={c.description}>
+  <Game lang={lang} start="learn" path="explore/" />
+</Base>

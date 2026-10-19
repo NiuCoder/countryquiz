@@ -1,0 +1,27 @@
+/* 站点新增样式(SEO 内容区、国家详情页、语言切换链接) */
+a.langbtn{display:inline-block;text-decoration:none}
+.seo{margin:28px 0 40px;font-weight:600;line-height:1.6;color:var(--text)}
+.seo h1{font-size:22px;font-weight:900;margin:0 0 10px}
+.seo h2{font-size:17px;font-weight:900;margin:24px 0 8px}
+.seo p{margin:0 0 12px;color:var(--muted)}
+.seo a{color:var(--blue-d);text-decoration:none}
+.seo a:hover{text-decoration:underline}
+.seo ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px}
+.seo ul.flags li{display:inline-flex;align-items:center;gap:6px}
+.seo ul.flags img{width:20px;height:15px;object-fit:cover;border-radius:2px;border:1px solid var(--border)}
+.cpage{max-width:600px;margin:0 auto;padding:18px}
+.cpage .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cpage .top a{color:var(--blue-d);text-decoration:none;font-weight:900}
+.cpage h1{font-size:26px;font-weight:900;margin:8px 0 16px}
+.cpage .vis{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;margin-bottom:16px}
+.cpage .vis img{width:100%;border:2px solid var(--border);border-radius:12px;aspect-ratio:4/3;object-fit:cover}
+.cpage .vis svg{width:100%;aspect-ratio:4/3;border:2px solid var(--border);border-radius:12px;background:var(--blue-l)}
+.cpage .vis svg path{fill:var(--shape);stroke:var(--shape-sh);stroke-width:1}
+.cpage dl{margin:0 0 20px}
+.cpage dl div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:2px solid var(--border)}
+.cpage dt{color:var(--muted)}
+.cpage dd{margin:0;text-align:right}
+.cpage h2{font-size:17px;font-weight:900;margin:22px 0 8px}
+.cpage ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 14px}
+.cpage a{color:var(--blue-d);text-decoration:none}
+.cpage a.btn{display:block;text-align:center;color:#fff;margin-top:20px}

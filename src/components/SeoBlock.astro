@@ -1,0 +1,29 @@
+---
+// 游戏下方的静态 SEO 内容:H1、简介、玩法/地区互链、国家列表
+import { COUNTRIES, MODE_SLUG, REGIONS, regionOf, url } from '../lib/site.js';
+import { MODE_NAME, REGION_NAME } from '../lib/copy.js';
+
+const { lang, h1, intro, region = 'world', mode = null } = Astro.props;
+const list = COUNTRIES.filter((c) => region === 'world' || regionOf(c.cont) === region);
+const nameOf = (c) => (lang === 'zh' ? c.zh : c.en);
+const L = lang === 'zh'
+  ? { modes: '更多玩法', regions: '按地区练习', countries: '本组国家', explore: '学习模式:点地图认国家' }
+  : { modes: 'More ways to play', regions: 'Practise by region', countries: 'Countries in this set', explore: 'Explore mode: tap the map to learn' };
+---
+<section class="seo">
+  <h1>{h1}</h1>
+  <p>{intro}</p>
+  <h2>{L.modes}</h2>
+  <ul>
+    {Object.keys(MODE_SLUG).map((m) => <li><a href={url(lang, `${MODE_SLUG[m]}/${region}/`)}>{MODE_NAME[lang][m]}</a></li>)}
+    <li><a href={url(lang, 'explore/')}>{L.explore}</a></li>
+  </ul>
+  <h2>{L.regions}</h2>
+  <ul>
+    {Object.keys(REGIONS).map((r) => <li><a href={url(lang, `${MODE_SLUG[mode ?? 'mix']}/${r}/`)}>{REGION_NAME[lang][r]}</a></li>)}
+  </ul>
+  <h2>{L.countries} ({list.length})</h2>
+  <ul class="flags">
+    {list.map((c) => <li><img src={`/flags/${c.a2}.svg`} alt="" width="20" height="15" loading="lazy"><a href={url(lang, `country/${c.slug}/`)}>{nameOf(c)}</a></li>)}
+  </ul>
+</section>

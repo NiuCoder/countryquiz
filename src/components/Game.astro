@@ -1,0 +1,141 @@
+---
+import { I18N } from '../game/i18n.js';
+import { HTML_LANG } from '../lib/site.js';
+
+const { lang, qmode = null, cont = null, start = null, path = '' } = Astro.props;
+const t = I18N[lang];
+const other = lang === 'zh' ? 'en' : 'zh';
+const altUrl = `/${other}/${path}`;
+const cfg = { lang, qmode, cont, start };
+---
+<div id="game-cfg" data-cfg={JSON.stringify(cfg)} hidden></div>
+<!-- 首页 -->
+<section class="screen on" id="home">
+  <div class="scroll"><div class="wrap">
+    <div class="topbar">
+      <div class="brand"><span id="logoM"></span><span data-i="brand">{t.brand}</span></div>
+      <div class="stats">
+        <span class="stat fire" id="stStreak"><span class="em">🔥</span><span id="hStreak">0</span></span>
+        <span class="stat xp" id="stXp"><span class="em">⭐</span><span id="hXp">0</span></span>
+        <button class="iconbtn" id="sndBtn">🔊</button>
+        <a class="langbtn" id="langBtn" href={altUrl} hreflang={HTML_LANG[other]} lang={HTML_LANG[other]} aria-label={t.langLabel}>{t.langBtn}</a>
+      </div>
+    </div>
+    <div class="hero">
+      <span class="m" id="heroM"></span>
+      <div class="bubble" id="heroTxt"></div>
+    </div>
+    <button class="learnbtn" id="learnBtn"><span class="ic">📖</span><span><span class="t" data-i="learnT">{t.learnT}</span><span class="d" data-i="learnD">{t.learnD}</span></span></button>
+    <h2 class="sec" data-i="secMode">{t.secMode}</h2>
+    <div class="qmodes" id="qmodes"></div>
+    <h2 class="sec" data-i="secLevel">{t.secLevel}</h2>
+    <div class="modes" id="modes"></div>
+    <h2 class="sec" data-i="secRegion">{t.secRegion}</h2>
+    <div class="chips" id="chips"></div>
+    <div class="known">
+      <div class="row"><span data-i="known">{t.known}</span><span><strong id="kN">0</strong> / <span id="kT">0</span></span></div>
+      <div class="bar"><i id="kBar" style="width:0"></i></div>
+    </div>
+    <p class="small" data-i="note">{t.note}</p>
+    <slot />
+  </div></div>
+  <div class="foot"><div class="wrap">
+    <button class="btn" id="startBtn"></button>
+  </div></div>
+</section>
+
+<!-- 练习 -->
+<section class="screen" id="lesson">
+  <div class="wrap">
+    <div class="lhead">
+      <button class="iconbtn" id="quitBtn">✕</button>
+      <div class="bar"><i id="pBar" style="width:0"></i></div>
+      <div class="hearts" id="hearts">❤️ <span id="hN">5</span></div>
+    </div>
+  </div>
+  <div class="lbody"><div class="wrap">
+    <div class="ask">
+      <span class="m" id="askM"></span>
+      <div class="bubble" id="askTxt"></div>
+    </div>
+    <div class="card" id="card">
+      <svg class="main" id="mapSvg" viewBox="0 0 400 300" role="img"></svg>
+      <div class="cardalt" id="cardAlt"></div>
+    </div>
+    <div class="cap">
+      <span id="capTxt"></span>
+      <div class="hints" id="hints">
+        <button class="hint" id="hLoc"></button>
+        <button class="hint" id="hCut"></button>
+      </div>
+    </div>
+    <div class="opts" id="opts"></div>
+  </div>
+  <div class="lfoot" id="lfoot"><div class="wrap">
+    <div class="fb" id="fb"><div class="ic" id="fbIc">✓</div><div><div class="tt" id="fbT"></div><div class="dd" id="fbD"></div></div></div>
+    <button class="btn" id="checkBtn" disabled></button>
+  </div></div>
+  </div>
+</section>
+
+<!-- 学习模式 -->
+<section class="screen" id="learn">
+  <div class="wrap lwide">
+    <div class="ltop">
+      <button class="iconbtn" id="learnBack">✕</button>
+      <h1 class="ltitle" data-i="learnTitle">{t.learnTitle}</h1>
+      <div class="search">
+        <span class="si" aria-hidden="true">🔍</span>
+        <input id="lsearch" type="search" autocomplete="off" enterkeyhint="search">
+        <div class="sugg" id="lsugg" role="listbox"></div>
+      </div>
+    </div>
+    <div class="lgrid">
+      <div class="lmap">
+        <svg id="worldSvg" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid slice" role="img"></svg>
+        <div class="maphint" data-i="learnHint">{t.learnHint}</div>
+        <div class="zoomctl">
+          <button id="zIn">+</button><button id="zOut">−</button><button id="zReset">⟲</button>
+        </div>
+      </div>
+      <div class="linfo" id="linfo" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 结果 -->
+<section class="screen" id="result">
+  <div class="scroll"><div class="wrap res">
+    <span class="m" id="resM"></span>
+    <h1 id="resT"></h1>
+    <p class="sub" id="resS"></p>
+    <div class="tiles">
+      <div class="tile" style="--c:#ffc800"><div class="h" data-i="tXp">{t.tXp}</div><div class="v" id="rXp">0</div></div>
+      <div class="tile" style="--c:#58cc02"><div class="h" data-i="tAcc">{t.tAcc}</div><div class="v" id="rAcc">0%</div></div>
+      <div class="tile" style="--c:#1cb0f6"><div class="h" data-i="tTime">{t.tTime}</div><div class="v" id="rTime">0:00</div></div>
+    </div>
+    <h2 class="sec" style="text-align:left" data-i="review">{t.review}</h2>
+    <div class="review" id="review"></div>
+  </div></div>
+  <div class="foot"><div class="wrap btnrow">
+    <button class="btn" id="againBtn" data-i="againBtn">{t.againBtn}</button>
+    <button class="btn ghost" id="homeBtn" data-i="homeBtn">{t.homeBtn}</button>
+  </div></div>
+</section>
+
+<div class="modal" id="quitModal"><div class="sheet">
+  <span class="m" id="quitM"></span>
+  <h3 data-i="quitQ">{t.quitQ}</h3>
+  <div class="btnrow">
+    <button class="btn" id="stayBtn" data-i="stay">{t.stay}</button>
+    <button class="btn ghost" id="leaveBtn" style="color:var(--red)" data-i="leave">{t.leave}</button>
+  </div>
+</div></div>
+
+<script>
+  import { initGame } from '../game/game.js';
+  import { slugify } from '../lib/site.js';
+  const cfg = JSON.parse(document.getElementById('game-cfg').dataset.cfg);
+  cfg.countryUrl = (en) => `/${cfg.lang}/country/${slugify(en)}/`;
+  initGame(cfg);
+</script>

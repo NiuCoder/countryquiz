@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://countryshape-43r.pages.dev/sitemap-index.xml
