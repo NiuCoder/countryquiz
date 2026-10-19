@@ -2,6 +2,8 @@
 
 一个根据国家轮廓猜名字的中文地理小游戏。
 
+在线体验：https://countryshape-43r.pages.dev
+
 ## 本地运行
 
 直接用浏览器打开 `看轮廓猜国家.html`，或在项目目录运行：
@@ -22,3 +24,4 @@ python3 -m http.server 8080
 - 构建输出目录：`dist`
 
 构建只把原始 HTML 复制为网站首页，不修改游戏代码。
+推送到 `main` 分支后，Cloudflare Pages 会自动构建并部署。
