@@ -13,6 +13,8 @@ const abs = (l) => `${SITE}/${l}/${path}`;
 <html lang={HTML_LANG[lang]}>
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content={description}>
@@ -20,7 +22,7 @@ const abs = (l) => `${SITE}/${l}/${path}`;
 {LANGS.map((l) => <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(l)} />)}
 <link rel="alternate" hreflang="x-default" href={abs('en')}>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content={lang === 'zh' ? '看轮廓猜国家' : 'Guess the Country'}>
+<meta property="og:site_name" content={lang === 'zh' ? '国家猜猜看' : 'Guess the Country'}>
 <meta property="og:title" content={title}>
 <meta property="og:description" content={description}>
 <meta property="og:url" content={abs(lang)}>

@@ -28,7 +28,7 @@ export function landing(lang, mode, region, n) {
   const m = MODE_NAME[lang][mode], r = REGION_NAME[lang][region];
   if (lang === 'zh') {
     return {
-      title: `${m}:${r}（${n} 个国家）| 看轮廓猜国家`,
+      title: `${m}:${r}（${n} 个国家）| 国家猜猜看`,
       h1: `${m}：${r}`,
       description: `免费在线地理小游戏：${HOW.zh[mode]}覆盖${r} ${n} 个国家，答错的题会再出现，附首都、当地文字国名，无需注册。`,
       intro: `${HOW.zh[mode]}本组题库覆盖${r}的 ${n} 个国家，分入门、进阶、挑战三档难度。每道题答完会显示国家在地球上的位置、国旗、中英文名称、当地文字国名，答错的题会在本组结束前再考一次。`,
@@ -50,8 +50,8 @@ export const HOME = {
     intro: 'Guess the country from its shape or its flag, or find the right outline or flag for a country name. 165 countries, three difficulty levels, filter by continent. An explore mode lets you zoom a world map and tap any country for its flag, capital and local name.',
   },
   zh: {
-    title: '看轮廓猜国家：免费国旗、地图轮廓地理小游戏',
-    h1: '看轮廓猜国家：免费国旗与地图轮廓地理游戏',
+    title: '国家猜猜看：免费国旗、地图轮廓地理小游戏',
+    h1: '国家猜猜看：免费国旗与地图轮廓地理游戏',
     description: '多邻国风格的地理小游戏：看轮廓或国旗猜国家，附首都与当地文字国名。165 个国家，分难度、可按大洲筛选，免费、无需注册。',
     intro: '看轮廓或国旗猜国家，也可以看国名找轮廓、找国旗。题库 165 个国家，三档难度，可按大洲筛选。学习模式里可以拖动缩放世界地图，点任意国家查看国旗、首都和当地文字国名。',
   },
@@ -59,13 +59,13 @@ export const HOME = {
 
 export const EXPLORE = {
   en: { title: 'World Map Explorer: Flags, Capitals & Names | Guess the Country', h1: 'Explore the world map', description: 'Drag and zoom an interactive world map. Tap any country to see its flag, outline, capital, continent and local name, and hear it pronounced.' },
-  zh: { title: '世界地图学习模式：国旗、首都与国名 | 看轮廓猜国家', h1: '世界地图学习模式', description: '可拖动、缩放的世界地图。点任意国家查看国旗、轮廓、首都、所在大洲和当地文字国名，还能朗读。' },
+  zh: { title: '世界地图学习模式：国旗、首都与国名 | 国家猜猜看', h1: '世界地图学习模式', description: '可拖动、缩放的世界地图。点任意国家查看国旗、轮廓、首都、所在大洲和当地文字国名，还能朗读。' },
 };
 
 export function country(lang, c, name, cap, contName) {
   if (lang === 'zh') {
     return {
-      title: `${name}国旗、地图轮廓、首都与基本信息 | 看轮廓猜国家`,
+      title: `${name}国旗、地图轮廓、首都与基本信息 | 国家猜猜看`,
       h1: `${name}：国旗与地图轮廓`,
       description: `查看${name}（${c.en}）的国旗、地图轮廓、所在大洲（${contName}）${cap ? `、首都${cap}` : ''}和当地文字国名，并用免费地理小游戏测试自己。`,
     };

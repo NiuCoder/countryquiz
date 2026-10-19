@@ -1,6 +1,6 @@
 export const I18N={
 zh:{
-  title:'看轮廓猜国家', brand:'看轮廓猜国家',
+  title:'国家猜猜看', brand:'国家猜猜看',
   streak:'连续学习天数', xp:'经验值', sound:'声音开关', langBtn:'EN', langLabel:'Switch to English',
   tips:['我是小圆！看<b>轮廓</b>或<b>国旗</b>，猜猜是哪个国家吧。','答错的题会在后面<b>再出现一次</b>，多练几遍就记住啦！','卡住了？试试<b>📍 看位置</b>，就能看到它在地球的哪里。','答完会显示国家的<b>英文名</b>和<b>当地文字</b>，顺便学一学。'],
   secMode:'选择玩法', secLevel:'选择难度', secRegion:'选择地区',
