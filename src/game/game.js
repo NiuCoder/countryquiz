@@ -8,7 +8,7 @@ import { I18N } from './i18n.js';
 /**
  * 启动游戏。
  * @param cfg.lang       界面语言 'zh' | 'en'
- * @param cfg.qmode      可选，预设玩法（shape/findShape/flag/findFlag/mix）
+ * @param cfg.qmode      可选，预设玩法（shape/findShape/flag/findFlag/capital/fromCapital/mix）
  * @param cfg.cont       可选，预设地区（CONTS 中的中文名）
  * @param cfg.start      可选，'learn' 直接进入学习模式
  * @param cfg.countryUrl 英文国名 -> 国家详情页 URL
@@ -18,8 +18,8 @@ const $=s=>document.getElementById(s);
 const CONTS=['全世界','亚洲','欧洲','非洲','北美洲','南美洲','大洋洲'];
 const CONT_EN={'全世界':'World','亚洲':'Asia','欧洲':'Europe','非洲':'Africa','北美洲':'North America','南美洲':'South America','大洋洲':'Oceania'};
 const CONT_IC={'全世界':'🌏','亚洲':'🏯','欧洲':'🏰','非洲':'🦒','北美洲':'🗽','南美洲':'🦙','大洋洲':'🦘'};
-const QMODES=[['shape','🗺️'],['findShape','🔍'],['flag','🚩'],['findFlag','🎌'],['mix','🎲']];
-const QTYPES=['shape','findShape','flag','findFlag'];
+const QMODES=[['shape','🗺️'],['findShape','🔍'],['flag','🚩'],['findFlag','🎌'],['capital','🏛️'],['fromCapital','🏙️'],['mix','🎲']];
+const QTYPES=['shape','findShape','flag','findFlag','capital','fromCapital'];
 
 /* ---------- 界面文字 ---------- */
 
@@ -59,6 +59,9 @@ const N1=c=>S.lang==='zh'?c.zh:c.en;            // 当前语言的国名
 const N2=c=>S.lang==='zh'?c.en:c.zh;            // 另一种语言的国名
 const NAT=c=>(c.nat&&c.nat!==c.zh&&c.nat.toLowerCase()!==c.en.toLowerCase())?c.nat:''; // 当地文字
 const CN=k=>S.lang==='zh'?k:CONT_EN[k];
+const capOf=(c,zh)=>(CAPS[c.a2]||['',''])[zh?0:1].replace(/\s*[（(].*[）)]$/,''); // 去掉“（行政首都）”之类的括号说明
+const CAPN=c=>capOf(c,S.lang==='zh');           // 当前语言的首都名
+const CAPN2=c=>capOf(c,S.lang!=='zh');          // 另一种语言的首都名
 function esc(s){return String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
 function applyLang(){
   document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.dataset.i);});
@@ -142,6 +145,10 @@ function drawName(c){
   setCard(true,'namev');
   const nat=NAT(c);
   $('cardAlt').innerHTML=`<div class="pop"><div class="bigname">${esc(N1(c))}</div><div class="subname">${esc(N2(c))}</div>${nat?`<div class="natname"><bdi>${esc(nat)}</bdi></div>`:''}</div>`;
+}
+function drawCapital(c){
+  setCard(true,'namev');
+  $('cardAlt').innerHTML=`<div class="pop"><div class="bigname">${esc(CAPN(c))}</div><div class="subname">${esc(CAPN2(c))}</div></div>`;
 }
 function drawContext(c,ok){
   setCard(false);
@@ -232,7 +239,7 @@ function startLesson(){
   const order=pool.map(id=>[id,(S.known[id]||0)+Math.random()*1.6]).sort((a,b)=>a[1]-b[1]).map(a=>a[0]);
   const qs=shuffle(order.slice(0,Math.min(10,pool.length)));
   const types={};
-  qs.forEach((id,i)=>{types[id]=S.qmode==='mix'?QTYPES[i%4]:S.qmode;});
+  qs.forEach((id,i)=>{types[id]=S.qmode==='mix'?QTYPES[i%QTYPES.length]:S.qmode;});
   if(S.qmode==='mix'){const ts=shuffle(qs.map(id=>types[id]));qs.forEach((id,i)=>types[id]=ts[i]);}
   L={queue:qs.slice(),types,total:qs.length,i:0,done:0,wrong:0,hearts:5,xp:0,combo:0,miss:new Set(),requeued:new Set(),seen:qs.slice(),start:Date.now(),q:null};
   show('lesson');
@@ -243,6 +250,7 @@ function nextQ(){
   L.q={id,type,choices:pickChoices(id),sel:null,answered:false,hinted:false};
   if(type==='shape')drawShape(c);
   else if(type==='flag')drawFlag(c);
+  else if(type==='fromCapital')drawCapital(c);
   else drawName(c);
   $('capTxt').textContent=(type==='shape'&&c.omit)?t('omit'):'';
   $('hints').hidden=false;$('hLoc').disabled=false;$('hCut').disabled=false;
@@ -250,7 +258,7 @@ function nextQ(){
   $('opts').className='opts'+(pic?' pics':'');
   $('opts').innerHTML=L.q.choices.map((x,i)=>{
     const o=C[x];
-    if(!pic)return `<button class="opt" data-id="${x}"><span class="k">${i+1}</span>${esc(N1(o))}</button>`;
+    if(!pic)return `<button class="opt" data-id="${x}"><span class="k">${i+1}</span>${esc(type==='capital'?CAPN(o):N1(o))}</button>`;
     const inner=type==='findShape'?miniShape(o,160,120,8):`<img src="${flagUrl(o)}" alt="">`;
     return `<button class="opt pic" data-id="${x}" aria-label="${esc(t('opt')(i+1))}"><span class="k">${i+1}</span>${inner}<span class="nm"></span></button>`;
   }).join('');
@@ -282,7 +290,8 @@ function check(){
   $('hints').hidden=true;
   drawContext(c,ok);
   $('capTxt').innerHTML=nameTag(c);
-  const extra=[esc(N2(c)),NAT(c)?`<bdi>${esc(NAT(c))}</bdi>`:''].filter(Boolean).join(t('sep'));
+  const ans=q.type==='capital'?CAPN(c):N1(c);  // 首都玩法的“答案”是首都名
+  const extra=[q.type==='capital'?esc(N1(c)):q.type==='fromCapital'?esc(CAPN(c)):'',esc(N2(c)),NAT(c)?`<bdi>${esc(NAT(c))}</bdi>`:''].filter(Boolean).join(t('sep'));
   const lf=$('lfoot'),cb=$('checkBtn');
   if(ok){
     L.done++;L.combo++;const g=q.hinted?5:10;L.xp+=g;
@@ -290,7 +299,7 @@ function check(){
     lf.className='lfoot ok';$('fbIc').textContent='✓';
     const praise=t('praise');
     $('fbT').textContent=L.combo>=3?t('combo')(L.combo):praise[(Math.random()*praise.length)|0];
-    $('fbD').innerHTML=esc(N1(c))+t('sep')+extra+t('sep')+esc(t('plusXp')(g));
+    $('fbD').innerHTML=esc(ans)+t('sep')+extra+t('sep')+esc(t('plusXp')(g));
     setM($('askM'),'wow',true);
     $('askTxt').textContent=L.combo>=3?t('askFire'):t('askOk');
     cb.className='btn';sfx.ok();
@@ -298,7 +307,7 @@ function check(){
     L.hearts--;L.wrong++;L.combo=0;L.miss.add(q.id);
     if(!L.requeued.has(q.id)){L.requeued.add(q.id);L.queue.push(q.id);}
     lf.className='lfoot bad';$('fbIc').textContent='✕';
-    $('fbT').textContent=t('answer')+N1(c);
+    $('fbT').textContent=t('answer')+ans;
     $('fbD').innerHTML=extra+t('sep')+esc(L.hearts>0?t('retry'):t('out'));
     setM($('askM'),'sad',true);
     $('askTxt').textContent=t('askBad');

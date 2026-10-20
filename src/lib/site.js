@@ -10,6 +10,8 @@ export const MODE_SLUG = {
   findShape: 'find-the-shape-quiz',
   flag: 'flag-quiz',
   findFlag: 'find-the-flag-quiz',
+  capital: 'capital-quiz',
+  fromCapital: 'guess-country-by-capital',
   mix: 'mixed-quiz',
 };
 // URL 段 -> 游戏内部使用的中文大洲名（存档里也是这个值）

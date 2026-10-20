@@ -12,7 +12,7 @@ A Duolingo-style geography quiz with several game modes (outlines, flags and nam
 
 ### 玩法
 
-- 看轮廓猜国家 / 看国名找轮廓 / 看国旗猜国家 / 看国名找国旗 / 混合挑战
+- 看轮廓猜国家 / 看国名找轮廓 / 看国旗猜国家 / 看国名找国旗 / 看国名猜首都 / 看首都猜国家 / 混合挑战
 - 学习模式：可拖动、缩放的世界地图，点国家查看国旗、轮廓、首都、所在大洲和当地文字国名，支持朗读
 - 题库 165 个国家，分入门、进阶、挑战三档，可按大洲筛选
 - 答错的题会在本组结束前再考一次；进度保存在浏览器 localStorage 中，不需要注册
@@ -27,9 +27,9 @@ A Duolingo-style geography quiz with several game modes (outlines, flags and nam
 | `/{lang}/country/{slug}/` | 国家详情页：国旗、轮廓、首都、邻国 |
 | `/` | 跳转到 `/en/` |
 
-- 玩法 slug：`shape-quiz`、`find-the-shape-quiz`、`flag-quiz`、`find-the-flag-quiz`、`mixed-quiz`
+- 玩法 slug：`shape-quiz`、`find-the-shape-quiz`、`flag-quiz`、`find-the-flag-quiz`、`capital-quiz`、`guess-country-by-capital`、`mixed-quiz`
 - 地区 slug：`world`、`asia`、`europe`、`africa`、`north-america`、`south-america`、`oceania`
-- 每种语言约 400 个页面：70 个落地页、165 个国家页，外加首页、学习模式等
+- 每种语言约 215 个页面：49 个落地页、165 个国家页，外加首页、学习模式
 
 ### 目录
 
@@ -69,7 +69,7 @@ npm run preview  # 预览构建结果
 
 ### How to play
 
-- Shape to name, name to shape, flag to name, name to flag, or a mixed challenge
+- Shape to name, name to shape, flag to name, name to flag, name to capital, capital to name, or a mixed challenge
 - Explore mode: a draggable, zoomable world map. Tap a country to see its flag, outline, capital, continent and local-script name, and hear it read aloud
 - 165 countries across three difficulty levels, filterable by continent
 - Missed questions come back before the lesson ends. Progress is saved in the browser's localStorage; no sign-up needed
@@ -84,9 +84,9 @@ npm run preview  # 预览构建结果
 | `/{lang}/country/{slug}/` | Country page: flag, outline, capital, neighbouring countries |
 | `/` | Redirects to `/en/` |
 
-- Mode slugs: `shape-quiz`, `find-the-shape-quiz`, `flag-quiz`, `find-the-flag-quiz`, `mixed-quiz`
+- Mode slugs: `shape-quiz`, `find-the-shape-quiz`, `flag-quiz`, `find-the-flag-quiz`, `capital-quiz`, `guess-country-by-capital`, `mixed-quiz`
 - Region slugs: `world`, `asia`, `europe`, `africa`, `north-america`, `south-america`, `oceania`
-- Roughly 400 pages per language: 70 landing pages and 165 country pages, plus the home and explore pages
+- Roughly 215 pages per language: 49 landing pages and 165 country pages, plus the home and explore pages
 
 ### Project layout
 

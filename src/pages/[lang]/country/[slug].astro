@@ -69,7 +69,7 @@ const jsonld = [{
     </>)}
     <h2>{L.play}</h2>
     <ul>
-      {['flag', 'shape', 'mix'].map((m) => <li><a href={url(lang, `${MODE_SLUG[m]}/${region}/`)}>{MODE_NAME[lang][m]}: {contName}</a></li>)}
+      {['flag', 'shape', 'capital', 'mix'].map((m) => <li><a href={url(lang, `${MODE_SLUG[m]}/${region}/`)}>{MODE_NAME[lang][m]}: {contName}</a></li>)}
     </ul>
     <a class="btn" href={url(lang, `${MODE_SLUG.mix}/${region}/`)}>{L.play}</a>
   </main>
