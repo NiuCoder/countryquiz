@@ -6,7 +6,6 @@ export default defineConfig({
   site: 'https://countryquiz.app',
   trailingSlash: 'always',
   build: { format: 'directory' },
-  redirects: { '/': '/en/' },
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en', zh: 'zh-CN' } },
