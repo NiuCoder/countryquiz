@@ -1,6 +1,6 @@
 import META from '../data/meta.json';
 
-export const SITE = 'https://countryshape-43r.pages.dev';
+export const SITE = 'https://countryquiz.app';
 export const LANGS = ['en', 'zh'];
 export const HTML_LANG = { en: 'en', zh: 'zh-CN' };
 
