@@ -22,7 +22,7 @@ const abs = (l) => `${SITE}/${l}/${path}`;
 {LANGS.map((l) => <link rel="alternate" hreflang={HTML_LANG[l]} href={abs(l)} />)}
 <link rel="alternate" hreflang="x-default" href={abs('en')}>
 <meta property="og:type" content="website">
-<meta property="og:site_name" content={lang === 'zh' ? '国家猜猜看' : 'Guess the Country'}>
+<meta property="og:site_name" content={lang === 'zh' ? '国家猜猜看' : 'Country Quiz'}>
 <meta property="og:title" content={title}>
 <meta property="og:description" content={description}>
 <meta property="og:url" content={abs(lang)}>

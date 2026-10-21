@@ -9,7 +9,7 @@ export const getStaticPaths = () => LANGS.map((lang) => ({ params: { lang } }));
 const { lang } = Astro.params;
 const c = HOME[lang];
 const jsonld = [{
-  '@context': 'https://schema.org', '@type': 'WebApplication', name: c.h1, url: `${SITE}/${lang}/`,
+  '@context': 'https://schema.org', '@type': 'WebApplication', name: lang === 'zh' ? '国家猜猜看' : 'Country Quiz', url: `${SITE}/${lang}/`,
   applicationCategory: 'EducationalApplication', operatingSystem: 'Any', inLanguage: lang,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 }];

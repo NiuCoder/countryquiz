@@ -1,4 +1,4 @@
-# 国家猜猜看 / Guess the Country
+# 国家猜猜看 / Country Quiz
 
 当前版本 / Version: 0.3.0
 

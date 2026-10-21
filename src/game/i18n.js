@@ -2,7 +2,7 @@ export const I18N={
 zh:{
   title:'国家猜猜看', brand:'国家猜猜看',
   streak:'连续学习天数', xp:'经验值', sound:'声音开关', langBtn:'EN', langLabel:'Switch to English',
-  tips:['我是小圆！看<b>轮廓</b>或<b>国旗</b>，猜猜是哪个国家吧。','答错的题会在后面<b>再出现一次</b>，多练几遍就记住啦！','卡住了？试试<b>📍 看位置</b>，就能看到它在地球的哪里。','答完会显示国家的<b>英文名</b>和<b>当地文字</b>，顺便学一学。'],
+  tips:['我是小圆！选一种玩法：认<b>轮廓</b>、<b>国旗</b>或<b>首都</b>，看看你认识多少国家。','答错的题会在后面<b>再出现一次</b>，多练几遍就记住啦！','卡住了？试试<b>📍 看位置</b>，就能看到它在地球的哪里。','答完会显示国家的<b>英文名</b>、<b>首都</b>和<b>当地文字</b>，顺便学一学。'],
   secMode:'选择玩法', secLevel:'选择难度', secRegion:'选择地区',
   qm:{shape:['看轮廓猜国家','根据地图形状说出国名'],findShape:['看国名找轮廓','从四个形状里挑出它'],flag:['看国旗猜国家','认出这是谁的国旗'],findFlag:['看国名找国旗','从四面国旗里挑出它'],capital:['看国名猜首都','说出这个国家的首都'],fromCapital:['看首都猜国家','说出这座城市是哪国的首都'],mix:['混合挑战','六种题型随机出现']},
   lv:{1:['入门','最有名的国家'],2:['进阶','再认识更多国家'],3:['挑战','小国和冷门国家']},
@@ -30,9 +30,9 @@ zh:{
   zIn:'放大', zOut:'缩小', zReset:'看整个世界', worldLabel:'可点击的世界地图'
 },
 en:{
-  title:'Guess the Country', brand:'Guess the Country',
+  title:'Country Quiz', brand:'Country Quiz',
   streak:'Day streak', xp:'XP', sound:'Sound on/off', langBtn:'中', langLabel:'切换到中文',
-  tips:['Hi, I’m Orbi! Look at a <b>shape</b> or a <b>flag</b> and guess the country.','Missed one? It comes back <b>later in the lesson</b>, so you’ll learn it for sure.','Stuck? Tap <b>📍 Where is it</b> to see the country on a little globe.','After each answer you’ll see the name in <b>Chinese</b> and in the <b>local language</b> too.'],
+  tips:['Pick a mode and test your geography: guess countries by <b>shape</b>, <b>flag</b> or <b>capital</b>.','Missed one? It comes back <b>later in the lesson</b>, so you’ll learn it for sure.','Stuck? Tap <b>📍 Where is it</b> to see the country on a little globe.','After each answer you’ll see the <b>capital</b>, the name in <b>Chinese</b> and in the <b>local language</b> too.'],
   secMode:'Game mode', secLevel:'Difficulty', secRegion:'Region',
   qm:{shape:['Shape to name','Name the country from its outline'],findShape:['Name to shape','Pick its outline from four'],flag:['Flag to name','Tell whose flag this is'],findFlag:['Name to flag','Pick its flag from four'],capital:['Name to capital','Name the capital of a country'],fromCapital:['Capital to name','Which country is this the capital of?'],mix:['Mixed challenge','All six question types, shuffled']},
   lv:{1:['Easy','Famous countries'],2:['Medium','More countries'],3:['Hard','Small and lesser-known']},
