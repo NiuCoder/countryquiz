@@ -1,11 +1,9 @@
 ---
 import { I18N } from '../game/i18n.js';
-import { HTML_LANG } from '../lib/site.js';
+import LangSwitch from './LangSwitch.astro';
 
 const { lang, qmode = null, cont = null, start = null, path = '' } = Astro.props;
 const t = I18N[lang];
-const other = lang === 'zh' ? 'en' : 'zh';
-const altUrl = `/${other}/${path}`;
 const cfg = { lang, qmode, cont, start };
 ---
 <div id="game-cfg" data-cfg={JSON.stringify(cfg)} hidden></div>
@@ -18,7 +16,7 @@ const cfg = { lang, qmode, cont, start };
         <span class="stat fire" id="stStreak"><span class="em">🔥</span><span id="hStreak">0</span></span>
         <span class="stat xp" id="stXp"><span class="em">⭐</span><span id="hXp">0</span></span>
         <button class="iconbtn" id="sndBtn">🔊</button>
-        <a class="langbtn" id="langBtn" href={altUrl} hreflang={HTML_LANG[other]} lang={HTML_LANG[other]} aria-label={t.langLabel}>{t.langBtn}</a>
+        <LangSwitch lang={lang} path={path} />
       </div>
     </div>
     <div class="hero">

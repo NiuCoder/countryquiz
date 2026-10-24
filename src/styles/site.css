@@ -1,5 +1,6 @@
 /* 站点新增样式(SEO 内容区、国家详情页、语言切换链接) */
-a.langbtn{display:inline-block;text-decoration:none}
+.langwrap .langbtn{display:inline-block}
+.cpage .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .seo{margin:28px 0 40px;font-weight:600;line-height:1.6;color:var(--text)}
 .seo h1{font-size:22px;font-weight:900;margin:0 0 10px}
 .seo h2{font-size:17px;font-weight:900;margin:24px 0 8px}

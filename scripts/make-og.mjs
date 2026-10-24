@@ -22,6 +22,7 @@ const mascot = `<g transform="translate(80,115) scale(3.7)">
 const cards = {
   en: { title: 'Country Quiz', sub: 'Flags · Map shapes · Capitals', font: 'Arial Rounded MT Bold, Arial' },
   zh: { title: '国家猜猜看', sub: '国旗 · 地图轮廓 · 首都', font: 'PingFang SC, Hiragino Sans GB, Arial' },
+  fr: { title: 'Country Quiz', sub: 'Drapeaux · Silhouettes · Capitales', font: 'Arial Rounded MT Bold, Arial' },
 };
 for (const [lang, c] of Object.entries(cards)) {
   const flags = FLAGS.map((a, i) => flagImg(a, 60 + i * 112, 520, 96)).join('');

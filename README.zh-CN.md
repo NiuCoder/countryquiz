@@ -4,7 +4,7 @@
 
 当前版本 0.3.0 · 线上地址：https://countryquiz.app
 
-多邻国风格的地理小游戏，包含轮廓、国旗、国名、首都等多种玩法，中英文双语。基于 Astro 构建为静态站点：游戏逻辑是一个 JS 模块，外面套静态 HTML 页面，方便搜索引擎收录。
+多邻国风格的地理小游戏，包含轮廓、国旗、国名、首都等多种玩法，目前支持英文、中文、法文。基于 Astro 构建为静态站点：游戏逻辑是一个 JS 模块，外面套静态 HTML 页面，方便搜索引擎收录。
 
 ## 玩法
 
@@ -17,7 +17,7 @@
 
 | URL | 内容 |
 |---|---|
-| `/en/`、`/zh/` | 首页，可直接开始练习 |
+| `/en/`、`/zh/`、`/fr/` | 首页，可直接开始练习 |
 | `/{lang}/{mode}/{region}/` | 玩法 × 地区落地页，例如 `/en/flag-quiz/europe/`，打开即预设该玩法与地区 |
 | `/{lang}/explore/` | 学习模式（世界地图） |
 | `/{lang}/country/{slug}/` | 国家详情页：国旗、轮廓、首都、邻国 |
@@ -35,7 +35,7 @@
 - `public/flags/`：国旗 SVG（flag-icons，MIT 许可）
 - `src/lib/site.js`：站点常量、slug、国家列表；`src/lib/copy.js`：各页面的 SEO 标题与描述
 - `src/pages/`：路由（含 `sitemap.xml.ts`）；`src/layouts/Base.astro`：canonical、hreflang、OG、JSON-LD
-- `scripts/make-og.mjs`：重新生成分享图 `public/og-en.png`、`public/og-zh.png`
+- `scripts/make-og.mjs`：重新生成分享图 `public/og-en.png`、`public/og-zh.png`、`public/og-fr.png`
 
 ## 新增语言
 

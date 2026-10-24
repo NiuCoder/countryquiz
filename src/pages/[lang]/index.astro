@@ -2,14 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import Game from '../../components/Game.astro';
 import SeoBlock from '../../components/SeoBlock.astro';
-import { LANGS, SITE } from '../../lib/site.js';
+import { LANGS, SITE, BRAND } from '../../lib/site.js';
 import { HOME } from '../../lib/copy.js';
 
 export const getStaticPaths = () => LANGS.map((lang) => ({ params: { lang } }));
 const { lang } = Astro.params;
 const c = HOME[lang];
 const jsonld = [{
-  '@context': 'https://schema.org', '@type': 'WebApplication', name: lang === 'zh' ? '国家猜猜看' : 'Country Quiz', url: `${SITE}/${lang}/`,
+  '@context': 'https://schema.org', '@type': 'WebApplication', name: BRAND[lang], url: `${SITE}/${lang}/`,
   applicationCategory: 'EducationalApplication', operatingSystem: 'Any', inLanguage: lang,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 }];

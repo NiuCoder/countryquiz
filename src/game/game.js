@@ -3,11 +3,13 @@ import * as topojson from 'topojson-client';
 import topoData from '../data/topo.json';
 import metaData from '../data/meta.json';
 import capsData from '../data/caps.json';
+import namesFr from '../data/names-fr.json';
+import capsFr from '../data/caps-fr.json';
 import { I18N } from './i18n.js';
 
 /**
  * 启动游戏。
- * @param cfg.lang       界面语言 'zh' | 'en'
+ * @param cfg.lang       界面语言 'zh' | 'en' | 'fr'
  * @param cfg.qmode      可选，预设玩法（shape/findShape/flag/findFlag/capital/fromCapital/mix）
  * @param cfg.cont       可选，预设地区（CONTS 中的中文名）
  * @param cfg.start      可选，'learn' 直接进入学习模式
@@ -16,13 +18,14 @@ import { I18N } from './i18n.js';
 export function initGame(cfg){
 const $=s=>document.getElementById(s);
 const CONTS=['全世界','亚洲','欧洲','非洲','北美洲','南美洲','大洋洲'];
-const CONT_EN={'全世界':'World','亚洲':'Asia','欧洲':'Europe','非洲':'Africa','北美洲':'North America','南美洲':'South America','大洋洲':'Oceania'};
+const CONT_I18N={
+  zh:{'全世界':'全世界','亚洲':'亚洲','欧洲':'欧洲','非洲':'非洲','北美洲':'北美洲','南美洲':'南美洲','大洋洲':'大洋洲'},
+  en:{'全世界':'World','亚洲':'Asia','欧洲':'Europe','非洲':'Africa','北美洲':'North America','南美洲':'South America','大洋洲':'Oceania'},
+  fr:{'全世界':'Monde','亚洲':'Asie','欧洲':'Europe','非洲':'Afrique','北美洲':'Amérique du Nord','南美洲':'Amérique du Sud','大洋洲':'Océanie'},
+};
 const CONT_IC={'全世界':'🌏','亚洲':'🏯','欧洲':'🏰','非洲':'🦒','北美洲':'🗽','南美洲':'🦙','大洋洲':'🦘'};
 const QMODES=[['shape','🗺️'],['findShape','🔍'],['flag','🚩'],['findFlag','🎌'],['capital','🏛️'],['fromCapital','🏙️'],['mix','🎲']];
 const QTYPES=['shape','findShape','flag','findFlag','capital','fromCapital'];
-
-/* ---------- 界面文字 ---------- */
-
 
 /* ---------- 数据 ---------- */
 const TOPO=topoData,META=metaData,CAPS=capsData;
@@ -35,7 +38,7 @@ for(const id in META){
   if(drop.length){
     shape={type:'Feature',geometry:{type:'MultiPolygon',coordinates:full.geometry.coordinates.filter((_,i)=>!drop.includes(i))}};
   }
-  C[id]={id,zh,en,nat,a2,tier,cont,full,shape,omit:drop.length>0,center:d3.geoCentroid(shape)};
+  C[id]={id,zh,en,fr:namesFr[a2]||en,nat,a2,tier,cont,full,shape,omit:drop.length>0,center:d3.geoCentroid(shape)};
 }
 const IDS=Object.keys(C);
 function flagUrl(c){return '/flags/'+c.a2+'.svg';}
@@ -55,13 +58,21 @@ function curStreak(){return (S.last===dayStr()||S.last===yesterday())?S.streak:0
 
 /* ---------- 语言 ---------- */
 const t=k=>I18N[S.lang][k];
-const N1=c=>S.lang==='zh'?c.zh:c.en;            // 当前语言的国名
-const N2=c=>S.lang==='zh'?c.en:c.zh;            // 另一种语言的国名
-const NAT=c=>(c.nat&&c.nat!==c.zh&&c.nat.toLowerCase()!==c.en.toLowerCase())?c.nat:''; // 当地文字
-const CN=k=>S.lang==='zh'?k:CONT_EN[k];
-const capOf=(c,zh)=>(CAPS[c.a2]||['',''])[zh?0:1].replace(/\s*[（(].*[）)]$/,''); // 去掉“（行政首都）”之类的括号说明
-const CAPN=c=>capOf(c,S.lang==='zh');           // 当前语言的首都名
-const CAPN2=c=>capOf(c,S.lang!=='zh');          // 另一种语言的首都名
+const N1=c=>S.lang==='zh'?c.zh:S.lang==='fr'?c.fr:c.en; // 当前语言的国名
+const N2=c=>S.lang==='en'?c.zh:c.en;                     // 副标题：英文界面配中文，其余配英文
+const NAT=c=>{
+  const n1=N1(c);
+  return (c.nat&&c.nat!==c.zh&&c.nat.toLowerCase()!==c.en.toLowerCase()&&c.nat!==n1)?c.nat:'';
+};
+const CN=k=>(CONT_I18N[S.lang]||CONT_I18N.en)[k]||k;
+const stripNote=s=>String(s||'').replace(/\s*[（(].*[）)]$/,''); // 去掉“（行政首都）”之类说明
+const capRaw=(c,lang)=>{
+  if(lang==='fr') return capsFr[c.a2]||(CAPS[c.a2]||['',''])[1]||'';
+  const row=CAPS[c.a2]||['',''];
+  return lang==='zh'?row[0]:row[1];
+};
+const CAPN=c=>stripNote(capRaw(c,S.lang));
+const CAPN2=c=>stripNote(capRaw(c,S.lang==='en'?'zh':'en'));
 function esc(s){return String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
 function applyLang(){
   document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=t(el.dataset.i);});
@@ -426,19 +437,26 @@ function renderInfo(){
     $('lRand').onclick=()=>learnSelect(IDS[(Math.random()*IDS.length)|0]);
     return;
   }
-  const c=C[LSel],cap=CAPS[c.a2]||['',''],nat=NAT(c),zh=S.lang==='zh';
-  const pair=(a,b)=>`${esc(zh?a:b)}<span>${esc(zh?b:a)}</span>`;
+  const c=C[LSel],nat=NAT(c);
+  const pair=(a,b)=>`${esc(a)}<span>${esc(b)}</span>`;
+  const contMain=CN(c.cont), contAlt=S.lang==='en'?CONT_I18N.zh[c.cont]:CONT_I18N.en[c.cont];
+  const capMain=capRaw(c,S.lang), capAlt=capRaw(c,S.lang==='en'?'zh':'en');
   el.innerHTML=`<div class="itop"><img class="iflag" src="${flagUrl(c)}" alt=""><div><div class="iname">${esc(N1(c))}</div><div class="ien">${esc(N2(c))}</div></div></div>
   <div class="ishape">${miniShape(c,320,200,12)}</div>
   <dl class="ifacts">
-    <div><dt>${t('fName')}</dt><dd>${pair(c.zh,c.en)}</dd></div>
-    <div><dt>${t('fCont')}</dt><dd>${pair(c.cont,CONT_EN[c.cont])}</dd></div>
-    <div><dt>${t('fCap')}</dt><dd>${pair(cap[0],cap[1])}</dd></div>
+    <div><dt>${t('fName')}</dt><dd>${pair(N1(c),N2(c))}</dd></div>
+    <div><dt>${t('fCont')}</dt><dd>${pair(contMain,contAlt)}</dd></div>
+    <div><dt>${t('fCap')}</dt><dd>${pair(capMain,capAlt)}</dd></div>
     ${nat?`<div><dt>${t('fNat')}</dt><dd><bdi>${esc(nat)}</bdi></dd></div>`:''}
   </dl>
-  ${CAN_SPEAK?`<div class="iact"><button class="hint" id="spZh">${esc(t('speakZh'))}</button><button class="hint" id="spEn">${esc(t('speakEn'))}</button></div>`:''}
+  ${CAN_SPEAK?`<div class="iact"><button class="hint" id="spMain">${esc(S.lang==='fr'?t('speakFr'):S.lang==='zh'?t('speakZh'):t('speakEn'))}</button>${S.lang!=='en'?`<button class="hint" id="spEn">${esc(t('speakEn'))}</button>`:''}${S.lang!=='zh'?`<button class="hint" id="spZh">${esc(t('speakZh'))}</button>`:''}</div>`:''}
   <div class="iact"><a class="hint" href="${cfg.countryUrl(c.en)}">${esc(t('details'))}</a><button class="hint" id="lRand">${esc(t('randomBtn'))}</button></div>`;
-  if(CAN_SPEAK){$('spZh').onclick=()=>speak(c.zh,'zh-CN');$('spEn').onclick=()=>speak(c.en,'en-US');}
+  if(CAN_SPEAK){
+    const voice={zh:'zh-CN',en:'en-US',fr:'fr-FR'}[S.lang]||'en-US';
+    $('spMain').onclick=()=>speak(N1(c),voice);
+    if($('spEn'))$('spEn').onclick=()=>speak(c.en,'en-US');
+    if($('spZh'))$('spZh').onclick=()=>speak(c.zh,'zh-CN');
+  }
   $('lRand').onclick=()=>learnSelect(IDS[(Math.random()*IDS.length)|0]);
 }
 function openLearn(){
@@ -456,7 +474,8 @@ $('zOut').onclick=()=>WM.svg.transition().duration(300).call(WM.zoom.scaleBy,1/1
 $('zReset').onclick=()=>WM.svg.transition().duration(600).call(WM.zoom.transform,d3.zoomIdentity);
 function searchHits(q){
   q=q.trim().toLowerCase();if(!q)return null;
-  const sc=id=>{const c=C[id],ns=[c.zh,c.en.toLowerCase(),(c.nat||'').toLowerCase()];
+  const sc=id=>{const c=C[id];
+    const ns=[c.zh,c.en,c.fr||'',c.nat||''].map(n=>String(n).toLowerCase());
     if(ns.some(n=>n===q))return 0;if(ns.some(n=>n.startsWith(q)))return 1;if(ns.some(n=>n.includes(q)))return 2;return 9;};
   return IDS.map(id=>[id,sc(id)]).filter(a=>a[1]<9).sort((a,b)=>a[1]-b[1]||C[a[0]].tier-C[b[0]].tier).slice(0,6).map(a=>a[0]);
 }

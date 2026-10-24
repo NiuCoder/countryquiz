@@ -2,18 +2,16 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import Base from '../../../layouts/Base.astro';
-import { LANGS, COUNTRIES, SITE, MODE_SLUG, regionOf, url } from '../../../lib/site.js';
-import { country, MODE_NAME, REGION_NAME } from '../../../lib/copy.js';
+import { LANGS, COUNTRIES, SITE, MODE_SLUG, regionOf, url, nameOf, capOf } from '../../../lib/site.js';
+import { country, MODE_NAME, REGION_NAME, COUNTRY_UI, SEO_UI } from '../../../lib/copy.js';
+import LangSwitch from '../../../components/LangSwitch.astro';
 import topo from '../../../data/topo.json';
-import caps from '../../../data/caps.json';
 
 export const getStaticPaths = () =>
   LANGS.flatMap((lang) => COUNTRIES.map((c) => ({ params: { lang, slug: c.slug }, props: { c } })));
 
 const { lang, slug } = Astro.params;
 const { c } = Astro.props;
-const zh = lang === 'zh';
-const nameOf = (x) => (zh ? x.zh : x.en);
 
 // 轮廓:与游戏里一致,去掉远离本土的岛屿
 const geoms = topo.objects.countries.geometries;
@@ -29,21 +27,19 @@ const outline = d3.geoPath(proj).digits(1)(shape);
 const byFi = new Map(COUNTRIES.map((x) => [x.fi, x]));
 const neighbors = topojson.neighbors(geoms)[c.fi].map((i) => byFi.get(i)).filter(Boolean);
 
-const cap = caps[c.a2] ?? ['', ''];
-const capName = zh ? cap[0] : cap[1];
+const capName = capOf(c.a2, lang).replace(/\s*[（(].*[）)]$/, '');
 const region = regionOf(c.cont);
 const contName = REGION_NAME[lang][region];
-const name = nameOf(c);
+const name = nameOf(c, lang);
 const copy = country(lang, c, name, capName, contName);
-const showNat = c.nat && c.nat !== c.zh && c.nat.toLowerCase() !== c.en.toLowerCase();
+const showNat = c.nat && c.nat !== c.zh && c.nat.toLowerCase() !== c.en.toLowerCase() && c.nat !== name;
 const path = `country/${slug}/`;
-const L = zh
-  ? { home: '← 首页', names: '中英文名', cont: '所在大洲', cap: '首都', nat: '当地文字', nb: '相邻国家', play: '开始练习', flag: '国旗', outline: '地图轮廓' }
-  : { home: '← Home', names: 'Names', cont: 'Continent', cap: 'Capital', nat: 'Local name', nb: 'Neighbouring countries', play: 'Quiz yourself', flag: 'Flag', outline: 'Map outline' };
+const L = COUNTRY_UI[lang];
+const homeLabel = SEO_UI[lang].home;
 const jsonld = [{
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: zh ? '首页' : 'Home', item: `${SITE}/${lang}/` },
+    { '@type': 'ListItem', position: 1, name: homeLabel, item: `${SITE}/${lang}/` },
     { '@type': 'ListItem', position: 2, name: contName, item: `${SITE}/${lang}/${MODE_SLUG.mix}/${region}/` },
     { '@type': 'ListItem', position: 3, name, item: `${SITE}/${lang}/${path}` },
   ],
@@ -51,21 +47,21 @@ const jsonld = [{
 ---
 <Base lang={lang} path={path} title={copy.title} description={copy.description} jsonld={jsonld}>
   <main class="cpage">
-    <div class="top"><a href={url(lang)}>{L.home}</a><a href={url(zh ? 'en' : 'zh', path)} hreflang={zh ? 'en' : 'zh-CN'}>{zh ? 'EN' : '中'}</a></div>
+    <div class="top"><a href={url(lang)}>{L.home}</a><LangSwitch lang={lang} path={path} /></div>
     <h1>{copy.h1}</h1>
     <div class="vis">
       <img src={`/flags/${c.a2}.svg`} alt={`${L.flag}: ${name}`} width="320" height="240">
       <svg viewBox="0 0 320 240" role="img" aria-label={`${L.outline}: ${name}`}><path d={outline} /></svg>
     </div>
     <dl>
-      <div><dt>{L.names}</dt><dd>{c.zh} / {c.en}</dd></div>
+      <div><dt>{L.names}</dt><dd>{lang === 'zh' ? `${c.zh} / ${c.en}` : lang === 'fr' ? `${c.fr} / ${c.en}` : `${c.en} / ${c.zh}`}</dd></div>
       <div><dt>{L.cont}</dt><dd>{contName}</dd></div>
       {capName && <div><dt>{L.cap}</dt><dd>{capName}</dd></div>}
       {showNat && <div><dt>{L.nat}</dt><dd><bdi>{c.nat}</bdi></dd></div>}
     </dl>
     {neighbors.length > 0 && (<>
       <h2>{L.nb}</h2>
-      <ul>{neighbors.map((x) => <li><a href={url(lang, `country/${x.slug}/`)}>{nameOf(x)}</a></li>)}</ul>
+      <ul>{neighbors.map((x) => <li><a href={url(lang, `country/${x.slug}/`)}>{nameOf(x, lang)}</a></li>)}</ul>
     </>)}
     <h2>{L.play}</h2>
     <ul>

@@ -1,0 +1,42 @@
+---
+import { LANGS, HTML_LANG, LANG_SHORT, LANG_NATIVE, url } from '../lib/site.js';
+import { I18N } from '../game/i18n.js';
+
+const { lang, path = '' } = Astro.props;
+const label = I18N[lang].langLabel;
+---
+<div class="langwrap">
+  <button type="button" class="langbtn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="langMenu" aria-label={label}>{LANG_SHORT[lang]}</button>
+  <div class="langmenu" id="langMenu" role="listbox" aria-label={label} hidden>
+    {LANGS.map((l) => (
+      <a
+        role="option"
+        href={url(l, path)}
+        hreflang={HTML_LANG[l]}
+        lang={HTML_LANG[l]}
+        aria-selected={l === lang ? 'true' : 'false'}
+        class:list={[{ on: l === lang }]}
+      >
+        <span>{LANG_NATIVE[l]}</span>
+        <span class="lk">{LANG_SHORT[l]}</span>
+      </a>
+    ))}
+  </div>
+</div>
+<script is:inline>
+  (() => {
+    const btn = document.getElementById('langBtn');
+    const menu = document.getElementById('langMenu');
+    if (!btn || !menu) return;
+    const wrap = btn.closest('.langwrap');
+    const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = menu.hidden;
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+</script>

@@ -4,7 +4,7 @@ English | [简体中文](README.zh-CN.md)
 
 Version 0.3.0 · Live site: https://countryquiz.app
 
-A Duolingo-style geography quiz with several game modes (outlines, flags, names and capitals), in English and Chinese. Built with Astro as a static site: the game is a JS module wrapped in pre-rendered HTML pages, so search engines can index every page.
+A Duolingo-style geography quiz with several game modes (outlines, flags, names and capitals), in English, Chinese and French. Built with Astro as a static site: the game is a JS module wrapped in pre-rendered HTML pages, so search engines can index every page.
 
 ## How to play
 
@@ -17,7 +17,7 @@ A Duolingo-style geography quiz with several game modes (outlines, flags, names 
 
 | URL | Content |
 |---|---|
-| `/en/`, `/zh/` | Home page, start a quiz right away |
+| `/en/`, `/zh/`, `/fr/` | Home page, start a quiz right away |
 | `/{lang}/{mode}/{region}/` | Quiz × region landing page, e.g. `/en/flag-quiz/europe/`, which opens with that mode and region preset |
 | `/{lang}/explore/` | Explore mode (world map) |
 | `/{lang}/country/{slug}/` | Country page: flag, outline, capital, neighbouring countries |
@@ -35,7 +35,7 @@ A Duolingo-style geography quiz with several game modes (outlines, flags, names 
 - `public/flags/`: flag SVGs (flag-icons, MIT licence)
 - `src/lib/site.js`: site constants, slugs, country list; `src/lib/copy.js`: SEO titles and descriptions per page
 - `src/pages/`: routes (including `sitemap.xml.ts`); `src/layouts/Base.astro`: canonical, hreflang, Open Graph, JSON-LD
-- `scripts/make-og.mjs`: regenerates the share images `public/og-en.png` and `public/og-zh.png`
+- `scripts/make-og.mjs`: regenerates the share images `public/og-en.png`, `public/og-zh.png` and `public/og-fr.png`
 
 ## Adding a language
 
